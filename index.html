@@ -2,68 +2,82 @@
 <html lang="en">
 
   <head>
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-  
-    <title>Koakuma Project</title>
+    <title>Royal Road Song Generator | Koakuma Project</title>
+
     <!-- Basic SEO -->
     <meta name="google-site-verification" content="H6m3NW-zVHValfpkPNcvMoYo8SKa2q5xI3KOZiFD-iY" />
-    <meta name="description" content="The most comprehensive database of songs that uses the 'Royal Road' progression. You can get a random song that uses the 'Royal Road' chord progressions.">
+    <meta name="description" content="Get a random song that uses the Royal Road (王道進行) chord progression, and try the chords yourself with the built-in chord player.">
     <meta name="keywords" content="Koakuma, little devil, royal road, song randomizer, anime music, japanese chord progression, music tool, j-pop, 王道進行, 小悪魔">
     <meta name="author" content="aoi-hakuchou">
-  
-    <!-- Mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+    <link rel="canonical" href="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/">
+
     <!-- Open Graph (for Discord, Facebook, etc.) -->
     <meta property="og:title" content="Royal Road Song Generator">
     <meta property="og:description" content="Get a random song that uses the 'Royal Road' progression.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/">
     <meta property="og:image" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/preview.png">
-  
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Royal Road Song Generator">
     <meta name="twitter:description" content="Get a random song that uses the 'Royal Road' progression.">
     <meta name="twitter:image" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/preview.png">
-    <link rel="canonical" href="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script type="module" src="js/main.js"></script>
-    
+
+    <!-- Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="web_icon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="web_icon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="web_icon/favicon-16x16.png">
     <link rel="icon" type="image/x-icon" href="web_icon/favicon.ico">
     <link rel="manifest" href="web_icon/site.webmanifest">
-  
+
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://www.youtube.com">
     <link rel="preconnect" href="https://i.ytimg.com">
-  
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap" rel="stylesheet">    
 
-  </head> 
-  
-  <body>  
-    <button id="langToggle">日本語</button> 
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Scripts: deferred scripts and modules run in this order, so Tone.js is ready before main.js -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script defer src="https://www.youtube.com/iframe_api"></script>
+    <script type="module" src="js/main.js"></script>
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Royal Road Song Generator",
+      "url": "https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/",
+      "applicationCategory": "MusicApplication",
+      "inLanguage": ["en", "ja"]
+    }
+    </script>
+
+  </head>
+
+  <body>
+    <noscript>
+      Royal Road Song Randomizer picks a random song that uses the Royal Road (王道進行) chord progression.
+      Please enable JavaScript to use the song randomizer and the chord player.
+    </noscript>
+
+    <button id="langToggle" aria-label="Switch language">日本語</button>
     <h1 data-i18n="title">Royal Road Randomizer</h1>
-    <h2 data-i18n="description"></h2>
-    
+    <h2 data-i18n="description">Get a random song that uses the Royal Road progression.</h2>
+
     <div class="button-container">
       <button data-i18n="randomButtonLoading" id="rngVideo" disabled>Please wait for the player to load</button>
     </div>
-    
+
     <div class="video-section">
 
       <div id="historyPanel"></div>
@@ -85,7 +99,7 @@
       <div id="musicPanel">
 
         <div class="panel-section">
-          <h3 data-i18n="musicZone"></h3>
+          <h3 data-i18n="musicZone">Music Zone</h3>
           <div class="panel-buttons">
             <button class="note-btn" data-note="A">A</button>
             <button class="note-btn" data-note="Bb">B♭</button>
@@ -122,7 +136,7 @@
           <button id="playLogBtn">Play</button>
           <button id="generateBtn">Generate</button>
         </div>
-        
+
         <div class="panel-section">
           <h3>BPM:</h3>
           <div class="bpm-control">
@@ -131,25 +145,25 @@
           </div>
         </div>
 
-        <p data-i18n="musicHelper" id="musicHelper"></p>
+        <p data-i18n="musicHelper" id="musicHelper">Choose a chord type (optional), then press a note to play it. Press Generate, then a note, to build a four-chord progression in that key.</p>
 
       </div>
 
     </div>
 
     <div class="info-container">
-      <a id="songLink" data-i18n="songLink" href="https://docs.google.com/spreadsheets/d/1Xgt0j2xQlGcgNxjuAn2DNro8kPWpDbl8G1jYd_6wTIs/edit?pli=1&gid=641022915#gid=641022915">
+      <a id="songLink" data-i18n="songLink" target="_blank" rel="noopener noreferrer" href="https://docs.google.com/spreadsheets/d/1Xgt0j2xQlGcgNxjuAn2DNro8kPWpDbl8G1jYd_6wTIs/edit?pli=1&gid=641022915#gid=641022915">
         Song List
       </a>
       <div class="about-container">
-        <img src="Example%20C.png" id="overlayImage" alt="">
-        <p data-i18n="explanation" id="videoExplanation"></p>
+        <img src="Example%20C.png" id="overlayImage" alt="Example of the Royal Road chord progression in the key of C">
+        <p data-i18n="explanation" id="videoExplanation">The Royal Road progression (王道進行) is a chord sequence used in countless Japanese pop songs. In the key of C it goes F – G – Em – Am (IV – V – iii – vi).</p>
       </div>
     </div>
 
     <div class="footer-container">
       <h2>Follow / Contact:</h2>
-      
+
       <div class="social-links">
         <p data-i18n="contacts"></p>
         <!--a href="https://github.com/yourusername" target="_blank">GitHub</a>
