@@ -1,9 +1,10 @@
 /* ============================================================
-   BG COLLAGE — add these rules to the TOP of styles.css,
-   replacing or merging with the existing `html { }` block.
+   Royal Road Randomizer – styles.css
    ============================================================ */
 
 html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scrollbar-gutter: stable;
   /* Keep the gradient as a fallback while images load */
   background: linear-gradient(
@@ -16,11 +17,27 @@ html {
   overflow-x: hidden;
 }
 
+img {
+  max-width: 100%;
+}
+
+/* ------------------------------------------------------------
+   Keyboard focus (accessibility)
+   ------------------------------------------------------------ */
+:focus-visible {
+  outline: 3px solid #ffd54a;
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------
+   Background collage
+   ------------------------------------------------------------ */
+
 /* Fixed collage layer — sits behind everything */
 #bgCollage {
   position: fixed;
   inset: 0;
-  z-index: -2;          /* below body::before / body::after rain layers */
+  z-index: -2;          /* below body::before rain layer */
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -29,6 +46,7 @@ html {
   box-sizing: border-box;
   pointer-events: none;
   overflow: hidden;
+  contain: layout paint style;
 }
 
 #bgCollage .collage-cell {
@@ -69,17 +87,19 @@ html {
   pointer-events: none;
 }
 
-
+/* ------------------------------------------------------------
+   Headings
+   ------------------------------------------------------------ */
 h1 {
   position: relative;
   font-family: "Cinzel", serif;
-  font-size: 48px;
+  font-size: clamp(30px, 7vw, 48px);
   text-align: center;
   letter-spacing: 2px;
+  color: #f2f2f2;                      /* fallback if background-clip:text is unsupported */
   background: linear-gradient(#ffffff, #dcdcdc);
   -webkit-background-clip: text;
-  background-clip: text;        
-  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-shadow:
     1px 1px 0 rgba(0,0,0,0.25),
     2px 2px 4px rgba(0,0,0,0.4),
@@ -89,36 +109,48 @@ h1 {
 h2 {
   position: relative;
   font-family: "Lucida Console", "Courier New", fangsong;
-  font-size: 24px;
+  font-size: clamp(16px, 3.6vw, 24px);
   text-align: center;
   letter-spacing: 2px;
-    background: linear-gradient(#915BCF,#CF915B,#5BCF91);
+  color: #d8c2ff;                      /* fallback if background-clip:text is unsupported */
+  background: linear-gradient(#915BCF,#CF915B,#5BCF91);
   -webkit-background-clip: text;
-  background-clip: text;        
-  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-shadow:
     1px 1px 0 rgba(25,25,25,0.25),
     2px 2px 4px rgba(25,25,25,0.4),
     0 6px 14px rgba(25,25,25,0.6);
 }
 
+/* Only make the text transparent when the gradient clip actually works,
+   otherwise the headings would become invisible */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  h1, h2 {
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* ------------------------------------------------------------
+   Page + rain effect
+   ------------------------------------------------------------ */
 body {
   position: relative;
   z-index: 0;
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
+/* One rain layer (the old body::after layer had no background, so it
+   drew nothing but still cost a full-screen compositing layer) */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-
   z-index: 0;
-  opacity: 0.35;
+  opacity: 0.25;
 
-  /* same rain dots */
   background:
     radial-gradient(ellipse 2px 6px at 20% 10%, rgba(255,255,255,0.45), transparent 70%),
     radial-gradient(ellipse 2px 7px at 70% 30%, rgba(255,255,255,0.4), transparent 70%),
@@ -129,30 +161,8 @@ body::before {
     280px 380px,
     300px 400px;
 
-  /* 🔥 key change */
   will-change: transform;
-  transform: translateY(0);
-
-  animation: rainMove 12s linear infinite;
-}
-
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.25;
-  will-change: transform;
-}
-
-body::before {
   animation: rainMove 10s linear infinite;
-}
-
-body::after {
-  animation: rainMove 16s linear infinite;
-  opacity: 0.2;
 }
 
 @keyframes rainMove {
@@ -164,6 +174,9 @@ body::after {
   }
 }
 
+/* ------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------ */
 .button-container {
   position: relative;
   display: flex;
@@ -186,13 +199,6 @@ body::after {
   will-change: transform;
 }
 
-.button-container button:hover {
-  background: linear-gradient(145deg, #ffffff, #e0e0e0);
-  box-shadow:
-    0 0 12px rgba(255,255,255,0.4),
-    0 0 24px rgba(0,0,0,0.35);
-}
-
 .button-container button:active {
   transform: scale(0.92);
   transition: transform 0.01s;
@@ -209,6 +215,7 @@ body::after {
 
   font-size: 14px;
   padding: 6px 12px;
+  min-height: 36px;
 
   cursor: pointer;
   z-index: 1;
@@ -221,7 +228,7 @@ body::after {
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  background: #3498db;
+  background: #1d6fa5;     /* darker blue: white text now passes WCAG AA contrast */
   color: white;
 }
 
@@ -242,6 +249,9 @@ body::after {
   height: auto;
 }
 
+/* ------------------------------------------------------------
+   Music panel
+   ------------------------------------------------------------ */
 #musicLog {
   display: flex;
   flex-wrap: wrap;
@@ -281,7 +291,7 @@ body::after {
 
   flex-shrink: 0;
   width: clamp(160px, 18vw, 220px);
-  
+
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -301,12 +311,7 @@ body::after {
   color: #ffd1d1;
   border: none;
 
-  transition: all 0.02s ease;
-}
-
-#musicPanel button:hover {
-  background: rgba(0,155,115,0.35);
-  box-shadow: 0 0 8px rgba(255,255,255,0.07);
+  transition: background-color 0.05s ease, box-shadow 0.05s ease;
 }
 
 .panel-section h3 {
@@ -326,7 +331,7 @@ body::after {
   border-radius: 6px;
   border: none;
   cursor: pointer;
-} 
+}
 
 .note-btn {
   transition: transform 0.02s ease-out;
@@ -336,8 +341,9 @@ body::after {
   transform: scale(0.9);
 }
 
-.chord-btn.active {
-  background: #ff9800 !important;;
+/* Higher specificity instead of !important */
+#musicPanel .chord-btn.active {
+  background: #ff9800;
   box-shadow: 0 0 10px rgba(255,152,0,0.6);
 }
 
@@ -375,17 +381,20 @@ body::after {
   font-family: monospace;
 }
 
+/* ------------------------------------------------------------
+   Video area
+   ------------------------------------------------------------ */
 #videoContainer {
   max-width: 1080px;
-  flex: 1;         
-  min-width: 0;      
+  flex: 1;
+  min-width: 0;
   width: auto;
   margin: 0 auto;
 }
 
 #videoWrapper {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 9;       /* reserves space, so no layout shift when the player loads */
 }
 
 #videoPlayer {
@@ -396,6 +405,10 @@ body::after {
 #videoWrapper iframe {
   position: relative;
   z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 #videoInfo {
@@ -403,6 +416,7 @@ body::after {
   text-align: center;
   max-width: 560px;
   margin: 0px auto;
+  min-height: 72px;           /* reserves space for the title/note filled in by JS (less layout shift) */
 }
 
 #videoTitle {
@@ -449,20 +463,19 @@ body::after {
   top: 0;
   flex-shrink: 0;
   width: clamp(180px, 20vw, 250px);
-  height: auto;          /* drop the fixed 470px height too */
-  max-height: 470px;
   height: 470px;
+  max-height: 470px;
   padding: 10px;
-  
-  overflow-y: auto; 
+
+  overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  
+
   border-radius: 12px;
   background: rgba(0,0,0,0.5);
   color: #ffd1d1;
   box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-  
+
   -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
 }
@@ -523,6 +536,9 @@ body::after {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
+/* ------------------------------------------------------------
+   About box
+   ------------------------------------------------------------ */
 .about-container {
   position: relative;
   max-width: 1470px;
@@ -548,6 +564,66 @@ body::after {
   margin: 0;
 }
 
+/* ------------------------------------------------------------
+   Crawlable text section (#about-royal-road in index.html)
+   ------------------------------------------------------------ */
+.seo-content {
+  width: min(900px, calc(100% - 32px));
+  margin: 40px auto;
+  padding: 25px 30px;
+  box-sizing: border-box;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.5);
+  color: #ffd1d1;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+
+  line-height: 1.7;
+  font-size: 16px;
+  text-align: left;
+
+  /* Below the fold: let the browser skip rendering it until needed */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+
+/* Solid, readable headings here instead of the gradient style */
+.seo-content h2 {
+  margin: 1.4em 0 0.5em;
+  font-size: clamp(18px, 3vw, 22px);
+  letter-spacing: 1px;
+  text-align: left;
+  color: #ffffff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: none;
+}
+
+.seo-content h2:first-child {
+  margin-top: 0;
+}
+
+.seo-content p {
+  margin: 0 0 1em;
+}
+
+.seo-content ol {
+  margin: 0 0 1em;
+  padding-left: 1.4em;
+}
+
+.seo-content li {
+  margin: 0.4em 0;
+}
+
+.seo-content :lang(ja) {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+}
+
+/* ------------------------------------------------------------
+   Links
+   ------------------------------------------------------------ */
 a {
   color: #4da6ff;
   text-decoration: none;
@@ -563,22 +639,9 @@ a:visited {
   color: #b388ff;
 }
 
-@media (max-width: 900px) {
-  #historyPanel {
-    position: static;
-    transform: none;
-    margin: 0 auto 20px auto;
-    width: 90%;
-    max-height: 300px;
-  }
-
-  #musicPanel {
-    position: static;
-    width: 90%;
-    margin: 0 auto 20px auto;
-  }
-}
-
+/* ------------------------------------------------------------
+   Footer
+   ------------------------------------------------------------ */
 .footer-container {
   max-width: 1200px;
   margin: 60px auto 30px auto;
@@ -592,6 +655,9 @@ a:visited {
   border-radius: 12px;
 
   color: #ffd1d1;
+
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
 }
 
 .social-links {
@@ -607,16 +673,117 @@ a:visited {
   border-radius: 8px;
 
   background: rgba(255,255,255,0.1);
-  transition: all 0.15s ease;
-}
-
-.social-links a:hover {
-  background: rgba(0,155,115,0.35);
-  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .footer-note {
   font-size: 12px;
   opacity: 0.7;
   margin-top: 10px;
+}
+
+/* ------------------------------------------------------------
+   Hover effects: only on devices that really hover, so touch
+   screens don't get "stuck" hover states after a tap
+   ------------------------------------------------------------ */
+@media (hover: hover) {
+  .button-container button:hover {
+    background: linear-gradient(145deg, #ffffff, #e0e0e0);
+    box-shadow:
+      0 0 12px rgba(255,255,255,0.4),
+      0 0 24px rgba(0,0,0,0.35);
+  }
+
+  #musicPanel button:hover {
+    background: rgba(0,155,115,0.35);
+    box-shadow: 0 0 8px rgba(255,255,255,0.07);
+  }
+
+  .social-links a:hover {
+    background: rgba(0,155,115,0.35);
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+  }
+}
+
+/* ------------------------------------------------------------
+   Touch screens: larger tap targets
+   ------------------------------------------------------------ */
+@media (pointer: coarse) {
+  #musicPanel button,
+  .panel-buttons button,
+  .log-controls button,
+  #langToggle,
+  .social-links a {
+    min-height: 44px;
+  }
+}
+
+/* ------------------------------------------------------------
+   Tablets / phones
+   ------------------------------------------------------------ */
+@media (max-width: 900px) {
+  /* Put the video first so it is visible immediately instead of
+     sitting below the history panel */
+  #videoContainer {
+    order: -1;
+    flex: 1 1 100%;
+  }
+
+  #historyPanel {
+    position: static;
+    transform: none;
+    margin: 0 auto 20px auto;
+    width: 90%;
+    height: 300px;
+    max-height: 300px;
+  }
+
+  #musicPanel {
+    position: static;
+    width: 90%;
+    margin: 0 auto 20px auto;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Keep the title clear of the language button */
+  h1 {
+    margin-top: 56px;
+  }
+
+  .about-container,
+  .seo-content {
+    padding: 18px 16px;
+  }
+
+  /* Fewer collage cells on small screens = less painting and memory */
+  #bgCollage {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
+
+  #bgCollage .collage-cell:nth-child(n + 10) {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   Respect "reduce motion" setting
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+
+  #bgCollage .collage-cell img,
+  .button-container button,
+  .note-btn,
+  #musicPanel button,
+  .social-links a {
+    transition: none;
+  }
+
+  .spinner {
+    animation-duration: 2.5s;
+  }
 }
