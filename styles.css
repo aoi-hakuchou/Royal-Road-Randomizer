@@ -563,64 +563,6 @@ body::before {
   line-height: 1.6;
   margin: 0;
 }
-
-/* ------------------------------------------------------------
-   Crawlable text section (#about-royal-road in index.html)
-   ------------------------------------------------------------ */
-.seo-content {
-  width: min(900px, calc(100% - 32px));
-  margin: 40px auto;
-  padding: 25px 30px;
-  box-sizing: border-box;
-
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(0,0,0,0.5);
-  color: #ffd1d1;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-
-  line-height: 1.7;
-  font-size: 16px;
-  text-align: left;
-
-  /* Below the fold: let the browser skip rendering it until needed */
-  content-visibility: auto;
-  contain-intrinsic-size: auto 520px;
-}
-
-/* Solid, readable headings here instead of the gradient style */
-.seo-content h2 {
-  margin: 1.4em 0 0.5em;
-  font-size: clamp(18px, 3vw, 22px);
-  letter-spacing: 1px;
-  text-align: left;
-  color: #ffffff;
-  background: none;
-  -webkit-text-fill-color: currentColor;
-  text-shadow: none;
-}
-
-.seo-content h2:first-child {
-  margin-top: 0;
-}
-
-.seo-content p {
-  margin: 0 0 1em;
-}
-
-.seo-content ol {
-  margin: 0 0 1em;
-  padding-left: 1.4em;
-}
-
-.seo-content li {
-  margin: 0.4em 0;
-}
-
-.seo-content :lang(ja) {
-  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
-}
-
 /* ------------------------------------------------------------
    Links
    ------------------------------------------------------------ */
@@ -750,11 +692,7 @@ a:visited {
   h1 {
     margin-top: 56px;
   }
-
   .about-container,
-  .seo-content {
-    padding: 18px 16px;
-  }
 
   /* Fewer collage cells on small screens = less painting and memory */
   #bgCollage {
